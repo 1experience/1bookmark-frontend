@@ -6,6 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
+import SearchAutosuggest from './components/SearchAutosuggest'
+
 function App() {
   return (
     <div className="App">
@@ -13,7 +15,7 @@ function App() {
         <Container>
           <Form>
             <Row>
-              <Col><Form.Control size="lg" type="text" placeholder="Search"/></Col>
+              <Col><SearchAutosuggest/></Col>
             </Row>
           </Form>
         </Container>
