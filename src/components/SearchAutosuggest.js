@@ -2,6 +2,23 @@ import React from 'react';
 
 import Autosuggest from 'react-autosuggest';
 
+import axios from 'axios'
+
+async function getRecords(value) {
+  const inputValue = value.trim().toLowerCase();
+  const inputLength = inputValue.length;
+
+  const {data: records} = await axios.get('http://127.0.0.1:8080/');
+
+  let filtered = inputLength === 0 ? [] : records.filter(record =>
+    record.title.toLowerCase().slice(0, inputLength) === inputValue
+  );
+
+  console.log(filtered);
+
+  return filtered;
+}
+
 // Imagine you have a list of languages that you'd like to autosuggest.
 const languages = [
   {
@@ -67,7 +84,7 @@ const getSuggestions = value => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-  return inputLength === 0 ? [] : languages.filter(lang =>
+  return inputLength === 0 ? [] : getRecords(inputValue).filter(lang =>
     lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
 };
