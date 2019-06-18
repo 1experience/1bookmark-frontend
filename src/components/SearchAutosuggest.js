@@ -80,24 +80,27 @@ const languages = [
 ];
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = value => {
+async function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-  return inputLength === 0 ? [] : getRecords(inputValue).filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
+  let records = await getRecords(inputValue);
+  console.log(records);
+  return inputLength === 0 ? [] : records.filter(lang => {
+      console.log(lang);
+      return lang.title.toLowerCase().slice(0, inputLength) === inputValue
+    }
   );
-};
-
+}
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = suggestion => suggestion.title;
 
 // Use your imagination to render suggestions.
 const renderSuggestion = suggestion => (
   <div>
-    {suggestion.name}
+    {suggestion.title}
   </div>
 );
 
@@ -114,6 +117,8 @@ class SearchAutosuggest extends React.Component {
       value: '',
       suggestions: []
     };
+
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
   onChange = (event, {newValue}) => {
@@ -124,9 +129,11 @@ class SearchAutosuggest extends React.Component {
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({value}) => {
+  async onSuggestionsFetchRequested({value}) {
+    const sug = await getSuggestions(value);
+
     this.setState({
-      suggestions: getSuggestions(value)
+      suggestions: sug
     });
   };
 
