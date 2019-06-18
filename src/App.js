@@ -13,7 +13,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Container>
-          <Form>
+          <Form onSubmit={e => {
+            e.preventDefault();
+          }}>
             <Row>
               <Col><SearchAutosuggest/></Col>
             </Row>
